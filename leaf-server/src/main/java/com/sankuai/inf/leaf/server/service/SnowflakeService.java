@@ -25,8 +25,9 @@ public class SnowflakeService {
         if (flag) {
             String zkAddress = properties.getProperty(Constants.LEAF_SNOWFLAKE_ZK_ADDRESS);
             int port = Integer.parseInt(properties.getProperty(Constants.LEAF_SNOWFLAKE_PORT));
-            idGen = new SnowflakeIDGenImpl(zkAddress, port);
-            if(idGen.init()) {
+            // 2020-08-12 10:45:47 时间戳
+            idGen = new SnowflakeIDGenImpl(zkAddress, port, 1597200347000L);
+            if (idGen.init()) {
                 logger.info("Snowflake Service Init Successfully");
             } else {
                 throw new InitException("Snowflake Service Init Fail");

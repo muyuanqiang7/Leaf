@@ -2,19 +2,18 @@ package com.sankuai.inf.leaf.snowflake;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
+import com.sankuai.inf.leaf.common.PropertyFactory;
 import com.sankuai.inf.leaf.snowflake.exception.CheckLastTimeException;
 import org.apache.commons.io.FileUtils;
+import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryUntilElapsed;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Maps;
-import com.sankuai.inf.leaf.common.*;
-import org.apache.curator.RetryPolicy;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.zookeeper.CreateMode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,12 +27,12 @@ import java.util.concurrent.TimeUnit;
 
 public class SnowflakeZookeeperHolder {
     private static final Logger LOGGER = LoggerFactory.getLogger(SnowflakeZookeeperHolder.class);
-    private String zk_AddressNode = null;//保存自身的key  ip:port-000000001
-    private String listenAddress = null;//保存自身的key ip:port
-    private int workerID;
     private static final String PREFIX_ZK_PATH = "/snowflake/" + PropertyFactory.getProperties().getProperty("leaf.name");
     private static final String PROP_PATH = System.getProperty("java.io.tmpdir") + File.separator + PropertyFactory.getProperties().getProperty("leaf.name") + "/leafconf/{port}/workerID.properties";
     private static final String PATH_FOREVER = PREFIX_ZK_PATH + "/forever";//保存所有数据持久的节点
+    private String zk_AddressNode = null;//保存自身的key  ip:port-000000001
+    private String listenAddress = null;//保存自身的key ip:port
+    private int workerID;
     private String ip;
     private String port;
     private String connectionString;
@@ -224,6 +223,30 @@ public class SnowflakeZookeeperHolder {
                 .build();
     }
 
+    public String getZk_AddressNode() {
+        return zk_AddressNode;
+    }
+
+    public void setZk_AddressNode(String zk_AddressNode) {
+        this.zk_AddressNode = zk_AddressNode;
+    }
+
+    public String getListenAddress() {
+        return listenAddress;
+    }
+
+    public void setListenAddress(String listenAddress) {
+        this.listenAddress = listenAddress;
+    }
+
+    public int getWorkerID() {
+        return workerID;
+    }
+
+    public void setWorkerID(int workerID) {
+        this.workerID = workerID;
+    }
+
     /**
      * 上报数据结构
      */
@@ -264,30 +287,6 @@ public class SnowflakeZookeeperHolder {
         public void setTimestamp(long timestamp) {
             this.timestamp = timestamp;
         }
-    }
-
-    public String getZk_AddressNode() {
-        return zk_AddressNode;
-    }
-
-    public void setZk_AddressNode(String zk_AddressNode) {
-        this.zk_AddressNode = zk_AddressNode;
-    }
-
-    public String getListenAddress() {
-        return listenAddress;
-    }
-
-    public void setListenAddress(String listenAddress) {
-        this.listenAddress = listenAddress;
-    }
-
-    public int getWorkerID() {
-        return workerID;
-    }
-
-    public void setWorkerID(int workerID) {
-        this.workerID = workerID;
     }
 
 }
